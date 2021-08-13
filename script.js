@@ -16,6 +16,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+// Soma os itens que estão carregados no carrinho
 function sumTotalPrice() {
   const result = Array.from(document.querySelectorAll('.cart__item'))
     .reduce((acc, currentItem) => {
@@ -31,6 +32,7 @@ function sumTotalPrice() {
   getTotalPriceContainer.appendChild(total);
 }
 
+// Atualiza o localStorage cada vez que há uma adição/remoção no carrinho
 function updateLocalStorage() {
   const currentCart = document.querySelector('.cart__items').innerHTML;
   localStorage.setItem('cartItems', currentCart);
@@ -81,6 +83,12 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// Mostra o conteúdo da página após carrgar os dados da API
+function showContent() {
+  document.querySelector('.loading').remove();
+  document.querySelector('.container').style.display = 'flex';
+}
+
 const fetchProduct = (product) => {
   fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
     .then((response) => response.json())
@@ -89,7 +97,8 @@ const fetchProduct = (product) => {
         const productItem = { sku: id, name: title, image: thumbnail };
         const itemSection = createProductItemElement(productItem);
         document.querySelector('.items').appendChild(itemSection);
-      }));
+      }))
+    .then(() => showContent());
 };
 
 btnEmptyCart.addEventListener('click', () => {
@@ -100,9 +109,7 @@ btnEmptyCart.addEventListener('click', () => {
 
 function loadSavedCart() {
   const savedCart = localStorage.getItem('cartItems');
-  if (savedCart !== null || undefined) {
   getCartItems.innerHTML = savedCart;
-  }
   document.querySelectorAll('.cart__item').forEach((item) => {
     item.addEventListener('click', cartItemClickListener);
   });
@@ -113,3 +120,9 @@ window.onload = () => {
   loadSavedCart();
   sumTotalPrice();
 };
+
+/*
+Referências:
+--> Para atender ao requisito 7:
+https://pt.stackoverflow.com/questions/63641/como-fazer-uma-tela-de-loading-antes-de-abrir-o-site
+*/
