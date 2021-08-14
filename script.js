@@ -24,12 +24,8 @@ function sumTotalPrice() {
       sum += Number(((currentItem.innerText.split(':'))[3]).trim().slice(1));
       return sum;
     }, 0);
-  let total = document.querySelector('.total-price p');
-  if (total === null) {
-    total = document.createElement('p');
-  }
-  total.innerText = result;
-  getTotalPriceContainer.appendChild(total);
+
+  getTotalPriceContainer.innerText = result;
 }
 
 // Atualiza o localStorage cada vez que há uma adição/remoção no carrinho
@@ -123,6 +119,8 @@ window.onload = () => {
 
 /*
 Referências:
+--> Req 5: usei o Array.from() para transformar a NodeList em array e poder usar o .reduce()
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/from
 --> Para atender ao requisito 7:
 https://pt.stackoverflow.com/questions/63641/como-fazer-uma-tela-de-loading-antes-de-abrir-o-site
 */
